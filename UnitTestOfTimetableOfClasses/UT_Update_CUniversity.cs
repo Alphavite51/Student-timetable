@@ -216,25 +216,55 @@ namespace UnitTestOfTimetableOfClasses
         }
 
         /// <summary>
-        /// Ввод данных аналогичных уже существующим
+        /// Ввод корректных данных, при условии, что Телефон дублирует Телефон существующего экземпляра(не учитывая основные атрибуты)
         /// </summary>
         [TestMethod]
-        public void Task_496_10() //дублирование всех атрибутов
+        public void Task_497_8()//дублирование Телефона
         {
             // arrange
-            MUniversity gr = new MUniversity("4401006282", "КГУ", "Канадский Государственный Университет", "156005, Костромская область, г. Кострома, ул. Дзержинского, 17", "156005, Костромская область, г. Кострома, ул. Дзержинского, 17", "Александр", "Наумов", "Рудольфович", "wkgu@mail.ru", "82942317960");
+            MUniversity gr = new MUniversity("5401006286", "КГУ", "Костромкой Государственный Университет", "156005, Костромская область, г. Кострома, ул. Дзержинского, 17", "156005, Костромская область, г. Кострома, ул. Дзержинского, 17", "Александр", "Наумов", "Рудольфович", "kgu@mail.ru", "84992317960");
             bool result = refData.CUniversity.Insert(gr);
+            Assert.IsTrue(result);
+
+            MUniversity gr1 = new MUniversity("5401006256", "КГТУ", "Костромкой Государственный Технический Университет", "156505, Костромская область, г. Кострома, ул. Дзержинского, 35", "156505, Костромская область, г. Кострома, ул. Дзержинского, 35", "Леонид", "Лионидов", "Леонидович", "kgtu@mail.ru", "84992317961");
+            result = refData.CUniversity.Insert(gr1);
             Assert.IsTrue(result);
 
             bool expected = false;
             //act 
-            MUniversity gr1 = new MUniversity("4401006282", "КГУ", "Канадский Государственный Университет", "156005, Костромская область, г. Кострома, ул. Дзержинского, 17", "156005, Костромская область, г. Кострома, ул. Дзержинского, 17", "Александр", "Наумов", "Рудольфович", "wkgu@mail.ru", "82942317960");
-            bool actual = refData.CUniversity.Insert(gr1);
+            gr1.Phone = "84992317960";
+            bool actual = refData.CUniversity.Update(gr1);
             //assert 
             Assert.AreEqual(expected, actual);
 
+
             result = refData.CUniversity.Delete(gr);
             Assert.IsTrue(result);
+
+            result = refData.CUniversity.Delete(gr1);
+            Assert.IsTrue(result);
+        }
+
+        /// <summary>
+        /// Ввод данных отсутствующих в структуре хранения данных
+        /// </summary>
+        [TestMethod]
+        public void Task_497_9() // Изменение несуществующих данных
+        {
+            // arrange
+            // MUniversity gr = new MUniversity("4401006282", "КГУ", "Канадский Государственный Университет", "156005, Костромская область, г. Кострома, ул. Дзержинского, 17", "156005, Костромская область, г. Кострома, ул. Дзержинского, 17", "Александр", "Наумов", "Рудольфович", "wkgu@mail.ru", "82942317960");
+            // bool result = refData.CUniversity.Insert(gr);
+            // Assert.IsTrue(result);
+
+            bool expected = false;
+            //act 
+            MUniversity gr1 = new MUniversity("4401006282", "КГУ", "Канадский Государственный Университет", "156005, Костромская область, г. Кострома, ул. Дзержинского, 17", "156005, Костромская область, г. Кострома, ул. Дзержинского, 17", "Александр", "Наумов", "Рудольфович", "wkgu@mail.ru", "82942317960");
+            bool actual = refData.CUniversity.Update(gr1);
+            //assert 
+            Assert.AreEqual(expected, actual);
+
+            // result = refData.CUniversity.Delete(gr);
+            // Assert.IsTrue(result);
         }
     }
 }
